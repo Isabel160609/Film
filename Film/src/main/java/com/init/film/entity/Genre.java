@@ -1,19 +1,11 @@
 package com.init.film.entity;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,12 +21,20 @@ import lombok.Setter;
 public class Genre {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "genre_id")
 	private int genre_id;
 
-	@Column(name = "name")
-	String name;
-	@OneToMany(mappedBy="genre", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private List<Film>listFilm;
+	@Column(name = "name", unique=true)
+	private String name;
+
+	public Genre(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "Genre [genre_id=" + genre_id + ", name=" + name + "]";
+	}
+
 }
