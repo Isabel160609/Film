@@ -60,26 +60,17 @@ class GenreControllerTest {
 	public void test_listGenres() throws Exception {
 		GenreDto genreDto1 = new GenreDto("romantic");
 		GenreDto genreDto2 = new GenreDto("action");
-//		Genre genre1 = new Genre("romantic");
-//		Genre genre2 = new Genre("action");
-//		List<Genre> genres = new ArrayList<Genre>();
-//		genres.add(genre1);
-//		genres.add(genre2);
+
 		List<GenreDto> genresDto = new ArrayList<GenreDto>();
 		genresDto.add(genreDto1);
 		genresDto.add(genreDto2);
-		Pageable pageable = PageRequest.of(0, 10, Sort.by("name"));
-		int start = (int) pageable.getOffset();
-		int end = (int) ((start + pageable.getPageSize()) > genresDto.size() ? genresDto.size()
-				: (start + pageable.getPageSize()));
-		//Page<Genre> pageP = new PageImpl<Genre>(genres.subList(start, end), pageable, genres.size());
-		Page<GenreDto> pageDto = new PageImpl<GenreDto>(genresDto.subList(start, end), pageable, genresDto.size());
-		int page=0;
-		String order="name";
-		int size=10;
-		when(genreService.listGenres(PageRequest.of(page, size, Sort.by(order)))).thenReturn(pageDto);
+		PageRequest pageable=PageRequest.of(1, 10);
+		Page<GenreDto>genreDtopage=new PageImpl<>(genresDto, pageable, genresDto.size());
 		
-		this.mockMvc.perform(get("/list"))
+
+		when(genreService.listGenres(Mockito.any(PageRequest.class))).thenReturn(genreDtopage);
+		
+		this.mockMvc.perform(get("/Film/genre/list"))
 		.andExpect(status().isOk())
 		.andDo(print());
 		}
